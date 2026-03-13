@@ -3,7 +3,7 @@ platformVersion: "20"
 autoDeploy: true
 
 run:
-  port: 3000
+  port: 8080
   startCommand: node server.js
 
 database:
