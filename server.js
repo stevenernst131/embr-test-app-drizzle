@@ -10,6 +10,15 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Version endpoint for branch testing
+app.get('/api/version', (req, res) => {
+  res.json({
+    version: '1.1.0-branch-test',
+    branch: 'embr-cli-test-apr2026',
+    timestamp: new Date().toISOString(),
+  });
+});
+
 // Health check endpoint
 app.get('/health', async (req, res) => {
   try {
