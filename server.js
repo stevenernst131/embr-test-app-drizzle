@@ -109,6 +109,25 @@ app.get('/api/db/info', async (req, res) => {
   }
 });
 
+// --- Stats endpoint (added in r2-test-branch) ---
+app.get('/api/stats', async (req, res) => {
+  try {
+    const allTodos = await db.select().from(todos);
+    const completedCount = allTodos.filter(t => t.completed).length;
+    res.json({
+      branch: 'r2-test-branch',
+      totalTodos: allTodos.length,
+      completedTodos: completedCount,
+      pendingTodos: allTodos.length - completedCount,
+      completionRate: allTodos.length > 0
+        ? Math.round((completedCount / allTodos.length) * 100)
+        : 0,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Embr Test App (Drizzle) running on http://0.0.0.0:${PORT}`);
   console.log(`DATABASE_URL: ${process.env.DATABASE_URL ? '(configured)' : '(not set)'}`);
